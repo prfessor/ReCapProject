@@ -3,6 +3,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.InMemory
@@ -20,18 +21,21 @@ namespace DataAccess.InMemory
                 new Car { BrandId = 4, ColorId = 2, DailyPrice = 1300, Description = "LPGLİ VOLKSWAGEN 2017", Id = 198, ModelYear = 2017 }
             };
         }
-        
 
-        public void Add(Car carEntity)
+        public void Add(Car car)
         {
-            _cars.Add(carEntity);
+            _cars.Add(car);
         }
 
-        public void Delete(Car carEntity)
+        public void Delete(Car car)
         {
-            Car carToDelete;
-            carToDelete = _cars.SingleOrDefault(c => c.Id == carEntity.Id);
-            _cars.Remove(carToDelete);
+            Car carToDeleted = _cars.SingleOrDefault(c => c.Id == car.Id);
+            _cars.Remove(carToDeleted);
+        }
+
+        public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Car> GetAll()
@@ -39,34 +43,26 @@ namespace DataAccess.InMemory
             return _cars;
         }
 
-        public List<Car> GetById(int brandId)
+        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
         {
-            return _cars.Where(c => c.BrandId == brandId).ToList();
+            throw new NotImplementedException();
         }
 
-        public void Update(Car carEntity)
+        public List<Car> GetById(int id)
         {
-            Car carToUpdate;
-            carToUpdate = _cars.SingleOrDefault(c => c.Id == carEntity.Id);
-            carToUpdate.BrandId = carEntity.BrandId;
-            carToUpdate.ColorId = carEntity.ColorId;
-            carToUpdate.DailyPrice = carEntity.DailyPrice;
-            carToUpdate.Description = carEntity.Description;
-            carToUpdate.ModelYear = carEntity.ModelYear;
-            
+            return _cars.Where(c => c.BrandId == id).ToList();
         }
 
-        public List<Car> GetByDailyPrice(decimal min, decimal max)
+        public void Update(Car car)
         {
-            return _cars.Where(c => c.DailyPrice>=min && c.DailyPrice<=max).ToList();           
+            Car updatingCar = _cars.SingleOrDefault(c => c.Id == car.Id);
+            updatingCar.BrandId = car.BrandId;
+            updatingCar.DailyPrice = car.DailyPrice;
+            updatingCar.Description = car.Description;
+            updatingCar.ModelYear = car.ModelYear;
         }
 
-       
 
-        public List<Car> GetByModelYear(int modelYear)
-        {
-            return _cars.Where(c => c.ModelYear == modelYear).ToList();
-        }
     }
 
 
