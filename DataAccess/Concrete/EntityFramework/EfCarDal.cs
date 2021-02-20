@@ -10,11 +10,28 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : EfEntityRepositoryBase<Car,CarDbContext>, ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, CarDbContext>, ICarDal
     {
-        
+        public List<CarDetailDto> GetCarDetails()
+        {
+            using (CarDbContext context = new CarDbContext())
+            {
+                var result = from c in context.Cars
+                             join b in context.Brands
+                             on c.BrandId equals b.Id
+                             join col in context.Colors
+                             on c.ColorId equals col.Id
+                             select new CarDetailDto
+                             {
+                                 CarName = c.Description,
+                                 BrandName = b.Name,
+                                 ColorName = col.Name,
+                                 DailyPrice = c.DailyPrice
+                             };
+                return result.ToList();
 
-        
-        
+
+            }
+        }
     }
 }
