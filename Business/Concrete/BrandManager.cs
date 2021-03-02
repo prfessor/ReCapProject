@@ -13,7 +13,7 @@ namespace Business.Concrete
 
         public BrandManager(IBrandDal brandDal)
         {
-            brandDal = _brandDal;
+            _brandDal = brandDal;
         }
 
         public void Add(Brand brand)
